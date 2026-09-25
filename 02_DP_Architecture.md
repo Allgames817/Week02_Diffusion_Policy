@@ -56,13 +56,13 @@ Local Hydra overrides live under `diffusion_policy/config/` in the private check
 
 ## 3. Conditioning
 
-The dataset may return a full observation window of length 16, but `compute_loss` / `predict_action` condition only on the first $T_o{=}2$ steps:
+The dataset may return a full observation window of length 16, but `compute_loss` and `predict_action` condition only on the first two steps ($T_o = 2$). Those steps are flattened into the conditioning vector `global_cond`:
 
 $$
-\text{global\_cond} = \mathrm{flatten}(o_{t-1:t}) \in \mathbb{R}^{40}
+\mathrm{flatten}(o_{t-1:t}) \in \mathbb{R}^{40}
 $$
 
-Future observations inside the training window are **not** fed to the network as conditions. Do not confuse “dataset tensor length 16” with “model sees 16 observation steps.”
+Future observations inside the training window are **not** fed to the network as conditions. A dataset tensor of length 16 does not mean the model sees 16 observation steps.
 
 ---
 

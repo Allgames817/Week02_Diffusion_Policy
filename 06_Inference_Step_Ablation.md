@@ -56,7 +56,7 @@ Leading timesteps (from ablation notes):
 - Default: 3 warmups, 20 measured calls; report median and empirical P95.
 - **Excluded:** model load, H2D/D2H, env physics, video encode.
 
-Speedup $= \mathrm{median}(\mathrm{DDIM\text{-}100}) / \mathrm{median}(\mathrm{DDIM\text{-}K})$.
+Speedup = median latency of DDIM-100 divided by median latency of the current DDIM $K$.
 
 Same-day seed-0-only side run ([`ablation_seed0_summary.csv`](results/ablation_seed0_summary.csv)) had DDIM-100 median **1411 ms** vs main-table **1116 ms** — latency depends on GPU state that day. Do not treat either as a deployment SLA.
 
