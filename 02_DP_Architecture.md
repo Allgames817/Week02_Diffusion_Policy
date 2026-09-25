@@ -20,8 +20,8 @@ Training
   pred_ε = CondUnet1D(noisy_act, t, global_cond)
   loss = MSE(pred_ε, ε)
 
-Inference (eval / Day 6)
-────────────────────────
+Inference (eval / ablation)
+───────────────────────────
   obs_cond → global_cond [B, 40]
   x ~ N(0,I)  shape [B, 16, 2]
   for k = 1..K:
@@ -47,10 +47,10 @@ Inference (eval / Day 6)
 | Beta schedule | `squaredcos_cap_v2` | from checkpoint config |
 | Prediction type | epsilon | noise prediction |
 | EMA | on | eval loads `ema_model` |
-| Batch size | 32 | Day 5 local config |
+| Batch size | 32 | local training config |
 | Epochs | 100 | counters: epoch 99, global_step 33599 |
 
-Day 5 YAML: `diffusion_policy/config/day5_pusht_local.yaml` in the local checkout (inherits `train_diffusion_unet_lowdim_workspace`).
+Local Hydra overrides live under `diffusion_policy/config/` in the private checkout and inherit `train_diffusion_unet_lowdim_workspace`.
 
 ---
 
@@ -80,7 +80,7 @@ So each policy call plans $T_p{=}16$ steps but commits $T_a{=}8$ environment act
 
 ## 5. Schedulers: DDPM vs DDIM
 
-| | Training | Native inference | Day 6 ablation |
+| | Training | Native inference | Inference-step ablation |
 |---|---|---|---|
 | Noise levels | $N{=}100$ | often $K{=}N$ DDPM | DDIM $K\in\{100,50,20,10\}$ + full DDPM ref. |
 | Retrain needed? | — | — | **No** for DDIM $K$ (same $\beta$ array) |
@@ -88,7 +88,7 @@ So each policy call plans $T_p{=}16$ steps but commits $T_a{=}8$ environment act
 
 **Leading spacing** (diffusers 0.11.1 DDIM): fewer steps skip levels; the **first** noise index also changes (e.g. $K{=}10$ starts at 90, not 99). Reducing $K$ is therefore “fewer updates **and** a different starting level,” not only an early `break` inside a 100-step loop.
 
-This environment pins **diffusers 0.11.1**. Sparse DDPM timesteps are unsafe in that version’s step/variance indexing; Day 6 therefore keeps **full-chain DDPM** as reference and uses **DDIM** for the pure-$K$ sweep.
+This environment pins **diffusers 0.11.1**. Sparse DDPM timesteps are unsafe in that version’s step/variance indexing; the ablation therefore keeps **full-chain DDPM** as reference and uses **DDIM** for the pure-$K$ sweep.
 
 ---
 
@@ -113,4 +113,4 @@ Both improve robustness in their papers/codebases, but they are **not** intercha
 | Steps | one random $t$ per sample | $K$ sequential updates |
 | Weights | online `model` + EMA update | typically `ema_model` |
 
-Day 6 manifest confirms eval used `state_dict_key: ema_model`.
+The ablation manifest confirms eval used `state_dict_key: ema_model`.

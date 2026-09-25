@@ -1,6 +1,6 @@
 # 03 — Code Map
 
-File/function map for the Week 2 local learning run and Day 6 ablation. Paths are relative to a local checkout of [real-stanford/diffusion_policy](https://github.com/real-stanford/diffusion_policy). **This GitHub note does not include that source tree.**
+File/function map for the Week 2 local learning run and inference-step ablation. Paths are relative to a local checkout of [real-stanford/diffusion_policy](https://github.com/real-stanford/diffusion_policy). **This GitHub note does not include that source tree.**
 
 ---
 
@@ -8,7 +8,7 @@ File/function map for the Week 2 local learning run and Day 6 ablation. Paths ar
 
 ```
 train.py
-  → hydra config: day5_pusht_local.yaml
+  → Hydra config (local PushT overrides on official lowdim workspace)
   → TrainDiffusionUnetLowdimWorkspace.run()
        ├── PushTLowdimDataset / DataLoader / LinearNormalizer
        ├── DiffusionUnetLowdimPolicy.compute_loss(batch)
@@ -27,8 +27,8 @@ train.py
 | Policy | `diffusion_policy/policy/diffusion_unet_lowdim_policy.py` |
 | UNet | `diffusion_policy/model/diffusion/conditional_unet1d.py` |
 | Task / runner cfg | `diffusion_policy/config/task/pusht_lowdim.yaml` |
-| Day 5 overrides | `diffusion_policy/config/day5_pusht_local.yaml` |
-| Day 5 smoke | `diffusion_policy/config/day5_pusht_smoke.yaml` |
+| Local training overrides | `diffusion_policy/config/` (Hydra file inheriting official lowdim workspace) |
+| Smoke config | same `config/` folder (short debug run) |
 
 ---
 
@@ -50,14 +50,14 @@ eval.py
 
 `mean_score` in logs = average over rollouts of each episode’s **maximum** reward.
 
-Day 5 new-process eval artifact (copied): [`results/day5_final_eval.json`](results/day5_final_eval.json).
+New-process eval artifact (copied): [`results/final_eval.json`](results/final_eval.json).
 
 ---
 
-## 3. Day 6 ablation scripts (local only)
+## 3. Inference-step ablation scripts (local only)
 
 ```
-day6_ablation.py
+local ablation runner
   → --trust-checkpoint load latest.ckpt
   → inspect policy dims / N / ema key
   → for each (sampler, K) in randomized order:
@@ -66,7 +66,7 @@ day6_ablation.py
         optional video for first pair
   → summary.csv / summary.json / episodes.csv / manifest.json
 
-day6_plot.py
+local plot script
   → read summary.csv
   → score_vs_steps.png, latency_vs_steps.png, speed_quality.png
 ```
@@ -80,11 +80,11 @@ These scripts sit at the **root** of the local `diffusion_policy` checkout (next
 | Artifact | Role |
 |---|---|
 | `data/pusht/pusht_cchi_v7_replay.zarr` | demonstration dataset (not in this note) |
-| `data/outputs/day5_pusht_20260925_003955_seed42/` | formal training run |
+| `data/outputs/<training_run>/` | formal training run |
 | `.../checkpoints/latest.ckpt` | ~1 GB weights — **not** in this note |
 | `.../logs.json.txt` | per-batch log; reduced to [`results/epoch_metrics.csv`](results/epoch_metrics.csv) |
-| `data/outputs/day6_repeats_20260925_154951/` | main ablation (5 envs × 3 noise seeds) |
-| `data/outputs/day6_ablation_20260925_152122/` | seed-0-only side study |
+| `data/outputs/<ablation_primary>/` | main ablation (5 envs × 3 noise seeds) |
+| `data/outputs/<ablation_seed0>/` | seed-0-only side study |
 
 ---
 
@@ -94,7 +94,7 @@ These scripts sit at the **root** of the local `diffusion_policy` checkout (next
 |---|---|
 | `train_loss` / `val_loss` | noise-prediction MSE |
 | `train/mean_score`, `test/mean_score` | mean of episode max rewards over the runner’s init set |
-| Day 6 `policy_median_ms` | median of 20 CUDA-synced `predict_action` calls on one fixed obs |
-| Day 6 `speedup_vs_DDIM_reference` | median(DDIM-100) / median(current DDIM K) |
+| `policy_median_ms` | median of 20 CUDA-synced `predict_action` calls on one fixed obs |
+| `speedup_vs_DDIM_reference` | median(DDIM-100) / median(current DDIM K) |
 
 Do not report mean score as “success rate %.”

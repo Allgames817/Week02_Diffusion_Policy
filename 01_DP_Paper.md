@@ -88,7 +88,7 @@ EMA in Diffusion Policy averages **weights** across training steps. It is **not*
 
 DDPM training uses $N{=}100$ noise levels. At test time, DDIM can reuse the same trained $\beta$ schedule with fewer steps $K$ that divide $N$, without retraining. The paper and engineering practice care about the **speed–quality** tradeoff.
 
-Week 2 Day 6 measures that tradeoff on one self-trained checkpoint:
+This week's ablation measures that tradeoff on one self-trained checkpoint:
 
 | $K$ (DDIM) | mean score (5×3) | median latency | vs DDIM-100 |
 |---|---:|---:|---:|

@@ -1,8 +1,8 @@
 # Source Index
 
-Maps every number in this note to a local artifact. **Do not move or overwrite** the training/ablation directories when maintaining the note.
+Maps every number in this note to a local artifact. Checkpoint identity is the **SHA-256** below; folder names on disk may differ by machine.
 
-Upstream code: [real-stanford/diffusion_policy](https://github.com/real-stanford/diffusion_policy).  
+Upstream code: [real-stanford/diffusion_policy](https://github.com/real-stanford/diffusion_policy). 
 Week 1 companion: [Allgames817/Week01_ACT](https://github.com/Allgames817/Week01_ACT).
 
 ---
@@ -14,9 +14,9 @@ Week 1 companion: [Allgames817/Week01_ACT](https://github.com/Allgames817/Week01
 | `latest.ckpt` (~1.0 GB) | exceeds GitHub file limit; keep local |
 | PushT `.zarr` dataset | large; download from official data site |
 | Full `diffusion_policy` source tree | note-only repo (same as Week 1 vs ACT) |
-| `day6_ablation.py` / `day6_plot.py` | live in local checkout root |
-| Raw `logs.json.txt` (3.4 MB, per-batch) | reduced to `epoch_metrics.csv` |
-| `fixed_observation.pt` | timing helper only |
+| Local ablation / plot scripts | live in local checkout root |
+| Raw per-batch training log | reduced to `epoch_metrics.csv` |
+| Fixed timing observation tensor | timing helper only |
 
 ---
 
@@ -24,11 +24,11 @@ Week 1 companion: [Allgames817/Week01_ACT](https://github.com/Allgames817/Week01
 
 | Field | Value |
 |---|---|
-| Relative path | `data/outputs/day5_pusht_20260925_003955_seed42/checkpoints/latest.ckpt` |
+| Role | Self-trained PushT lowdim EMA policy |
 | SHA-256 | `922e11a246a4484e7d59956b9fa36da88cbfdf8d2406c937f92357b2cd09001d` |
-| Origin | self-trained Day 5 run |
 | Eval weights | `ema_model` |
 | Counters | epoch 99, global_step 33599 |
+| Local path | under `data/outputs/` in the private `diffusion_policy` checkout (match by SHA-256) |
 
 ---
 
@@ -36,17 +36,17 @@ Week 1 companion: [Allgames817/Week01_ACT](https://github.com/Allgames817/Week01
 
 | File | Source |
 |---|---|
-| [`epoch_metrics.csv`](epoch_metrics.csv) | extracted from Day 5 `logs.json.txt` (last row per epoch) |
-| [`day5_final_eval.json`](day5_final_eval.json) | Day 5 `final_eval/eval_log.json` |
-| [`summary.csv`](summary.csv) / [`summary.json`](summary.json) | `day6_repeats_20260925_154951/` (**primary** table) |
-| [`episodes.csv`](episodes.csv) | same repeats run |
-| [`latency_samples.csv`](latency_samples.csv) | same repeats run |
-| [`manifest.json`](manifest.json) | same; checkpoint path sanitized to repo-relative |
-| [`ablation_seed0_summary.csv`](ablation_seed0_summary.csv) | `day6_ablation_20260925_152122/` (**side study**, seed 0 only) |
+| [`epoch_metrics.csv`](epoch_metrics.csv) | last row per epoch from training `logs.json.txt` |
+| [`final_eval.json`](final_eval.json) | new-process `eval.py` log |
+| [`summary.csv`](summary.csv) / [`summary.json`](summary.json) | primary inference-step ablation (5 envs × 3 sampling seeds) |
+| [`episodes.csv`](episodes.csv) | same primary ablation |
+| [`latency_samples.csv`](latency_samples.csv) | same primary ablation |
+| [`manifest.json`](manifest.json) | run metadata (paths sanitized for publication) |
+| [`ablation_seed0_summary.csv`](ablation_seed0_summary.csv) | seed-0-only timing side study |
 | [`ablation_seed0_summary.json`](ablation_seed0_summary.json) | same |
-| [`comparison_table.md`](comparison_table.md) | Chinese Day 6 table copy |
-| [`CONCLUSION_zh.md`](CONCLUSION_zh.md) | Chinese Day 6 conclusion copy |
-| [`videos/`](videos/) | curated clips from `day6_record/videos/` |
+| [`comparison_table.md`](comparison_table.md) | Chinese ablation table copy |
+| [`CONCLUSION_zh.md`](CONCLUSION_zh.md) | Chinese ablation conclusion copy |
+| [`videos/`](videos/) | curated rollout clips |
 
 ---
 
@@ -56,18 +56,20 @@ Week 1 companion: [Allgames817/Week01_ACT](https://github.com/Allgames817/Week01
 |---|---|
 | [`figures/train_val_loss.png`](../figures/train_val_loss.png) | plotted from `epoch_metrics.csv` |
 | [`figures/rollout_score.png`](../figures/rollout_score.png) | plotted from `epoch_metrics.csv` |
-| [`figures/score_vs_steps.png`](../figures/score_vs_steps.png) | Day 6 `day6_plot.py` on repeats `summary.csv` |
+| [`figures/score_vs_steps.png`](../figures/score_vs_steps.png) | from primary ablation `summary.csv` |
 | [`figures/latency_vs_steps.png`](../figures/latency_vs_steps.png) | same |
-| [`figures/speed_quality.png`](../figures/speed_quality.png) | `day6_record/speed_quality.png` (y-axis 0–1) |
+| [`figures/speed_quality.png`](../figures/speed_quality.png) | same (English labels; y-axis zoomed) |
 
 ---
 
-## 5. Local directories (do not move)
+## 5. Local directories (author machine — do not move)
 
-| Content | Path in local `diffusion_policy` checkout |
+Exact folder names stay on the private checkout so experiments remain findable. They are **not** required to read this note.
+
+| Content | Role |
 |---|---|
-| Day 5 formal train | `data/outputs/day5_pusht_20260925_003955_seed42/` |
-| Day 6 primary ablation | `data/outputs/day6_repeats_20260925_154951/` |
-| Day 6 seed-0 side study | `data/outputs/day6_ablation_20260925_152122/` |
-| Curated Day 6 record | `data/outputs/day6_record/` |
+| PushT lowdim training + `latest.ckpt` | training run (seed 42, 100 epochs) |
+| Primary DDIM/DDPM ablation outputs | 5 env seeds × 3 sampling seeds |
+| Seed-0 timing side study | latency fluctuation check |
+| Curated videos / Chinese table drafts | packaging helpers |
 | This note | `Week02_Diffusion_Policy/` |

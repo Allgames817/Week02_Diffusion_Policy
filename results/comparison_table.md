@@ -2,9 +2,9 @@
 
 同一 checkpoint、同一评测面板。DDIM 各列只改推理步数 K。最左列是完整链原始 DDPM，只作采样器参照，不进入相对 DDIM-100 的速度比。
 
-数据来自本笔记 [`summary.csv`](summary.csv)（源目录 `data/outputs/day6_repeats_20260925_154951/`）。每格 15 次 rollout：环境种子 100000–100004 × 采样种子 0、1、2。mean score 是各次 episode 最大 reward 的平均，不是成功率。std 是描述性标准差。耗时是固定观测上 batch=1 的 `predict_action` 中位数 / 经验 P95（20 次测量）。
+数据来自本笔记 [`summary.csv`](summary.csv)。每格 15 次 rollout：环境种子 100000–100004 × 采样种子 0、1、2。mean score 是各次 episode 最大 reward 的平均，不是成功率。std 是描述性标准差。耗时是固定观测上 batch=1 的 `predict_action` 中位数 / 经验 P95（20 次测量）。
 
-|  | 原始 DDPM | DDIM K=100 | DDIM K=50 | DDIM K=20 | DDIM K=10 |
+| | 原始 DDPM | DDIM K=100 | DDIM K=50 | DDIM K=20 | DDIM K=10 |
 |---|---:|---:|---:|---:|---:|
 | 采样器 | DDPM 完整链 | DDIM | DDIM | DDIM | DDIM |
 | 推理步数 | 100 | 100 | 50 | 20 | 10 |

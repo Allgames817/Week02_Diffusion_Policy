@@ -1,6 +1,6 @@
-# 04 — Reproduction (PushT lowdim, Day 5)
+# 04 — Reproduction (PushT lowdim)
 
-Primary training directory (local checkout): `data/outputs/day5_pusht_20260925_003955_seed42/`.  
+Primary training directory: private checkout under `data/outputs/` (identify by checkpoint SHA-256 in [SOURCE_INDEX](results/SOURCE_INDEX.md)).
 Reduced logs and eval JSON are copied under [`results/`](results/). **Checkpoint weights are not copied into this note.**
 
 This is a **learning experiment** (100 epochs, small runner panel). It is **not** the paper’s full simulation benchmark.
@@ -37,19 +37,19 @@ Checkpoint / normalizer are paired with this 20-D dataset. Do not mix with 5-D C
 
 | Hyperparameter | Value | Notes |
 |---|---|---|
-| Config name | `day5_pusht_local` | inherits official lowdim workspace |
-| Policy | `DiffusionUnetLowdimPolicy` | |
+| Config name | local Hydra override on official lowdim workspace | inherits UNet widths etc. |
+| Policy | `DiffusionUnetLowdimPolicy` |
 | UNet dims | `[256, 512, 1024]` | official |
-| `horizon` / `n_obs_steps` / `n_action_steps` | 16 / 2 / 8 | |
-| `num_train_timesteps` | 100 | |
+| `horizon` / `n_obs_steps` / `n_action_steps` | 16 / 2 / 8 |
+| `num_train_timesteps` | 100 |
 | Batch size | 32 | train + val |
-| DataLoader workers | 0 | |
+| DataLoader workers | 0 |
 | `n_envs` | 1 | AsyncVectorEnv still uses one worker |
 | Rollout panel while training | 1 train + 3 test inits | every 10 epochs |
-| EMA | True | |
-| LR | AdamW `1e-4` (official) | |
-| Epochs | 100 | |
-| Seed | 42 | |
+| EMA | True |
+| LR | AdamW `1e-4` (official) |
+| Epochs | 100 |
+| Seed | 42 |
 | W&B | disabled | package still imported |
 | Checkpointing | `latest` every epoch; top-k **off** | latest ≠ best |
 
@@ -99,7 +99,7 @@ Command pattern (local checkout):
 python eval.py --checkpoint <run>/checkpoints/latest.ckpt --output_dir <run>/final_eval --device cuda:0
 ```
 
-Result: [`results/day5_final_eval.json`](results/day5_final_eval.json)
+Result: [`results/final_eval.json`](results/final_eval.json)
 
 | Metric | Value |
 |---|---|
@@ -114,9 +114,9 @@ This reuses the runner settings stored in the checkpoint (learning-scale panel).
 
 | Field | Value |
 |---|---|
-| Relative path | `data/outputs/day5_pusht_20260925_003955_seed42/checkpoints/latest.ckpt` |
+| Relative path | private checkout under `data/outputs/…/checkpoints/latest.ckpt` |
 | SHA-256 | `922e11a246a4484e7d59956b9fa36da88cbfdf8d2406c937f92357b2cd09001d` |
-| Loaded key (Day 6) | `ema_model` |
+| Loaded key | `ema_model` |
 | Saved counters | epoch **99**, global_step **33599** |
 | Approx. size | ~1.0 GB — **not uploaded** |
 

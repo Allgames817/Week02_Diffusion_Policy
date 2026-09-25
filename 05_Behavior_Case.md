@@ -1,8 +1,8 @@
 # 05 — Behavior Case (env 100000 vs 100003)
 
-Under the Day 6 protocol (same EMA checkpoint, max 300 env steps), aggregate mean scores look high for most DDIM settings. Looking at individual episodes shows a **sampler- and noise-seed-specific** failure that pulls down DDPM and DDIM-20 averages.
+Under the ablation protocol (same EMA checkpoint, max 300 env steps), aggregate mean scores look high for most DDIM settings. Looking at individual episodes shows a **sampler- and noise-seed-specific** failure that pulls down DDPM and DDIM-20 averages.
 
-Raw per-episode table: [`results/episodes.csv`](results/episodes.csv).  
+Raw per-episode table: [`results/episodes.csv`](results/episodes.csv). 
 Videos: [`results/videos/`](results/videos/).
 
 ---

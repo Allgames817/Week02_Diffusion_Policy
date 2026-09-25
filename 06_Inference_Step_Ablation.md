@@ -1,4 +1,4 @@
-# 06 — Inference Step Ablation (Day 6)
+# 06 — Inference Step Ablation
 
 Controlled study on **one** self-trained EMA checkpoint: how DDIM inference step count $K$ trades latency for PushT mean score.  
 Main numbers: [`results/summary.csv`](results/summary.csv), [`results/manifest.json`](results/manifest.json).  
@@ -10,7 +10,7 @@ Chinese table/conclusion copies: [`results/comparison_table.md`](results/compari
 
 | Field | Value |
 |---|---|
-| Checkpoint | `day5_pusht_20260925_003955_seed42/checkpoints/latest.ckpt` |
+| Checkpoint | self-trained PushT lowdim `latest.ckpt` (local) |
 | SHA-256 | `922e11a246a4484e7d59956b9fa36da88cbfdf8d2406c937f92357b2cd09001d` |
 | Origin | self-trained (user-declared) |
 | Weights | `ema_model` |
@@ -37,7 +37,7 @@ Chinese table/conclusion copies: [`results/comparison_table.md`](results/compari
 
 **Separate reference:** full-chain native **DDPM** (not entered into DDIM speedup ratios). Do not attribute DDPM→DDIM-10 entirely to “smaller $K$.”
 
-Leading timesteps (from Day 6 notes):
+Leading timesteps (from ablation notes):
 
 | $K$ | First levels (leading) |
 |---|---|

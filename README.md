@@ -4,7 +4,7 @@ Research note for VLA Roadmap Week 2. Numbers come from a local PushT lowdim lea
 
 **Detail docs:** [01 Paper](01_DP_Paper.md) · [02 Architecture](02_DP_Architecture.md) · [03 Code Map](03_DP_Code_Map.md) · [04 Reproduction](04_Reproduction.md) · [05 Behavior Case](05_Behavior_Case.md) · [06 Inference Ablation](06_Inference_Step_Ablation.md) · [Source Index](results/SOURCE_INDEX.md)
 
-Chinese summary of the Day 6 table: [`results/CONCLUSION_zh.md`](results/CONCLUSION_zh.md) · [`results/comparison_table.md`](results/comparison_table.md).
+Chinese summary of the ablation table: [`results/CONCLUSION_zh.md`](results/CONCLUSION_zh.md) · [`results/comparison_table.md`](results/comparison_table.md).
 
 ---
 
@@ -66,14 +66,14 @@ This week’s evidence is a **learning experiment** on PushT (not Transfer Cube)
 ```
 obs [B, 2, 20] → flatten → global_cond [B, 40]
 clean actions [B, 16, 2]
-  → add noise at random t ∈ {0..N-1}
-  → CondUnet1D predicts noise
-  → MSE(pred_noise, true_noise)
+ → add noise at random t ∈ {0..N-1}
+ → CondUnet1D predicts noise
+ → MSE(pred_noise, true_noise)
 
 Inference:
-  x_T ~ N(0,I)
-  → K DDPM or DDIM updates conditioned on global_cond
-  → unnormalize → slice action_pred[:, 1:9] → execute
+ x_T ~ N(0,I)
+ → K DDPM or DDIM updates conditioned on global_cond
+ → unnormalize → slice action_pred[:, 1:9] → execute
 ```
 
 EMA smooths **network weights** during training (different from ACT temporal aggregation of overlapping action chunks). Details: [02_DP_Architecture.md](02_DP_Architecture.md).
@@ -84,23 +84,23 @@ EMA smooths **network weights** during training (different from ACT temporal agg
 
 ```
 train.py
-  → TrainDiffusionUnetLowdimWorkspace
-  → PushTLowdimDataset / DataLoader / normalizer
-  → DiffusionUnetLowdimPolicy.compute_loss
-  → EMA + checkpoint latest.ckpt
-eval.py / day6_ablation.py
-  → load ema_model
-  → PushTKeypointsRunner (closed-loop)
-  → mean of episode max rewards
+ → TrainDiffusionUnetLowdimWorkspace
+ → PushTLowdimDataset / DataLoader / normalizer
+ → DiffusionUnetLowdimPolicy.compute_loss
+ → EMA + checkpoint latest.ckpt
+eval.py / local ablation runner
+ → load ema_model
+ → PushTKeypointsRunner (closed-loop)
+ → mean of episode max rewards
 ```
 
 Full map: [03_DP_Code_Map.md](03_DP_Code_Map.md). Scripts live in the local `diffusion_policy` checkout; this note does not vendor the upstream repo.
 
 ---
 
-## 6. Reproduction (Day 5)
+## 6. Reproduction (training)
 
-Task: **PushT** lowdim keypoints. Config: `day5_pusht_local.yaml` (inherits official UNet widths). Machine: Windows + RTX 4060 Laptop, PyTorch 2.1.2+cu121, diffusers 0.11.1. Training seed **42**, **100** epochs, batch **32**, EMA on. Checkpoint SHA-256 `922e11a2…0001d` (full hash in [SOURCE_INDEX](results/SOURCE_INDEX.md)).
+Task: **PushT** lowdim keypoints. Local Hydra config inherits official UNet widths (`train_diffusion_unet_lowdim_workspace`). Machine: Windows + RTX 4060 Laptop, PyTorch 2.1.2+cu121, diffusers 0.11.1. Training seed **42**, **100** epochs, batch **32**, EMA on. Checkpoint SHA-256 `922e11a2…0001d` (full hash in [SOURCE_INDEX](results/SOURCE_INDEX.md)).
 
 | Setting | Value |
 |---|---|
@@ -116,11 +116,11 @@ Mean score = average of **episode max reward**, not binary success rate. Val los
 
 ## 7. Behavior Case
 
-Under Day 6 seeds, env **100000** / sampling seed **0** reaches max reward **1.0** for all five sampler settings. Env **100003** / sampling seed **0** fails for **DDPM-100** and **DDIM-20** (max reward **0.179**, full 300 steps) while DDIM-100/50/10 succeed. Videos: [`results/videos/`](results/videos/). Details: [05_Behavior_Case.md](05_Behavior_Case.md).
+Under the ablation seeds, env **100000** / sampling seed **0** reaches max reward **1.0** for all five sampler settings. Env **100003** / sampling seed **0** fails for **DDPM-100** and **DDIM-20** (max reward **0.179**, full 300 steps) while DDIM-100/50/10 succeed. Videos: [`results/videos/`](results/videos/). Details: [05_Behavior_Case.md](05_Behavior_Case.md).
 
 ---
 
-## 8. Inference Step Ablation (Day 6)
+## 8. Inference Step Ablation
 
 **Fixed:** same self-trained EMA checkpoint, normalizer, windows, beta schedule, DDIM $\eta{=}0$, leading spacing, env seeds `100000–100004`, sampling seeds `0,1,2`, max 300 env steps.
 
@@ -168,13 +168,13 @@ Full write-up: [06_Inference_Step_Ablation.md](06_Inference_Step_Ablation.md).
 
 ---
 
-## Artifact locations (do not move)
+## Artifact locations
 
-| Content | Path (local `diffusion_policy` checkout) |
+| Content | Where |
 |---|---|
-| Day 5 training + `latest.ckpt` | `data/outputs/day5_pusht_20260925_003955_seed42/` |
-| Day 6 main table | `data/outputs/day6_repeats_20260925_154951/` |
-| Day 6 seed-0 timing side study | `data/outputs/day6_ablation_20260925_152122/` |
+| Training run + `latest.ckpt` | private `diffusion_policy` checkout (`data/outputs/…`; match by SHA-256) |
+| Primary inference-step ablation tables | copied under [`results/`](results/) |
+| Seed-0 timing side study | [`results/ablation_seed0_summary.csv`](results/ablation_seed0_summary.csv) |
 | This note | `Week02_Diffusion_Policy/` |
 
 **Checkpoints and the upstream source tree are not copied into this GitHub note** (see [SOURCE_INDEX](results/SOURCE_INDEX.md)).
