@@ -1,0 +1,108 @@
+﻿{
+    "status":  "complete",
+    "checkpoint":  "data/outputs/day5_pusht_20260925_003955_seed42/checkpoints/latest.ckpt",
+    "checkpoint_sha256":  "922e11a246a4484e7d59956b9fa36da88cbfdf8d2406c937f92357b2cd09001d",
+    "checkpoint_origin_user_declared":  "self_trained",
+    "checkpoint_info":  {
+                            "policy_class":  "diffusion_policy.policy.diffusion_unet_lowdim_policy.DiffusionUnetLowdimPolicy",
+                            "state_dict_key":  "ema_model",
+                            "obs_dim":  20,
+                            "action_dim":  2,
+                            "horizon":  16,
+                            "n_obs_steps":  2,
+                            "n_action_steps":  8,
+                            "training_noise_levels":  100,
+                            "original_inference_steps":  100,
+                            "scheduler_class":  "diffusers.schedulers.scheduling_ddpm.DDPMScheduler",
+                            "saved_counters":  {
+                                                   "epoch":  99,
+                                                   "global_step":  33599
+                                               }
+                        },
+    "versions":  {
+                     "python":  "3.9.25 (main, Nov  3 2025, 22:44:01) [MSC v.1929 64 bit (AMD64)]",
+                     "platform":  "Windows-10-10.0.26200-SP0",
+                     "torch":  "2.1.2+cu121",
+                     "diffusers":  "0.11.1",
+                     "numpy":  "1.23.3",
+                     "hydra-core":  "1.2.0",
+                     "omegaconf":  "2.3.1",
+                     "dill":  "0.3.5.1",
+                     "gym":  "0.21.0",
+                     "pymunk":  "6.2.1",
+                     "pygame":  "2.1.2",
+                     "wandb":  "0.13.3",
+                     "av":  "12.3.0"
+                 },
+    "git":  {
+                "commit":  "5ba07ac6661db573af695b419a7947ecb704690f",
+                "status":  "?? DAY5_LOCAL_README.md\n?? DAY6_LOCAL_README.md\n?? DAY6_REPORT_TEMPLATE.md\n?? VALIDATION_STATUS.json\n?? day5_check_local.py\n?? day5_environment.txt\n?? day5_git_commit.txt\n?? day5_local_changes.patch\n?? day6_ablation.py\n?? day6_plot.py\n?? diffusion_policy/config/day5_pusht_local.yaml\n?? diffusion_policy/config/day5_pusht_smoke.yaml"
+            },
+    "arguments":  {
+                      "checkpoint":  "data/outputs/day5_pusht_20260925_003955_seed42/checkpoints/latest.ckpt",
+                      "trust_checkpoint":  true,
+                      "origin":  "self_trained",
+                      "inspect":  false,
+                      "out":  "data/outputs/day6_repeats_20260925_154951",
+                      "device":  "cuda:0",
+                      "steps":  [
+                                    100,
+                                    50,
+                                    20,
+                                    10
+                                ],
+                      "env_seeds":  [
+                                        100000,
+                                        100001,
+                                        100002,
+                                        100003,
+                                        100004
+                                    ],
+                      "sampling_seeds":  [
+                                             0,
+                                             1,
+                                             2
+                                         ],
+                      "max_steps":  null,
+                      "native_reference":  true,
+                      "warmup":  3,
+                      "repeats":  20,
+                      "no_video":  false,
+                      "order_seed":  2026
+                  },
+    "device":  "cuda:0",
+    "gpu":  "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "condition_order":  [
+                            [
+                                "DDIM_50",
+                                "DDIM",
+                                50
+                            ],
+                            [
+                                "DDPM_100",
+                                "DDPM",
+                                100
+                            ],
+                            [
+                                "DDIM_10",
+                                "DDIM",
+                                10
+                            ],
+                            [
+                                "DDIM_20",
+                                "DDIM",
+                                20
+                            ],
+                            [
+                                "DDIM_100",
+                                "DDIM",
+                                100
+                            ]
+                        ],
+    "n_envs":  1,
+    "model_training":  false,
+    "latency_definition":  "CUDA-synchronized wall time for batch-1 predict_action; fixed GPU-resident observation; excludes model load, environment, video and H2D/D2H",
+    "rng_protocol":  "Policy RNG reset for every episode; same sampling seed reused for paired treatments. Environment worker uses the separate environment seed.",
+    "timesteps_rule":  "DDIM leading, steps_offset=0, set_alpha_to_one=True; exact trained betas; eta=0; use_clipped_model_output=False",
+    "uncertainty":  "score_std is descriptive, not a confidence interval; noise repeats on the same environment are not independent environment samples"
+}

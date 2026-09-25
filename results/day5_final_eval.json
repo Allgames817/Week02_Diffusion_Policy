@@ -1,0 +1,10 @@
+{
+  "test/mean_score": 1.0,
+  "test/sim_max_reward_100000": 1.0,
+  "test/sim_max_reward_100001": 1.0,
+  "test/sim_max_reward_100002": 1.0,
+  "test/sim_video_100000": "data\\outputs\\day5_pusht_20260925_003955_seed42\\final_eval\\media\\r5fh8t6u.mp4",
+  "train/mean_score": 0.9796517706824578,
+  "train/sim_max_reward_0": 0.9796517706824578,
+  "train/sim_video_0": "data\\outputs\\day5_pusht_20260925_003955_seed42\\final_eval\\media\\e4vr46me.mp4"
+}
